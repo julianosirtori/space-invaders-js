@@ -1,10 +1,12 @@
 const keys = {
-  a: "left",
+  KeyA: "left",
   ArrowLeft: "left",
-  d: "right",
+  KeyD: "right",
   ArrowRight: "right",
+  Space: "space",
 };
 
+// observer pattern
 export function createKeyboardListener(document) {
   const state = {
     observers: [],
@@ -28,7 +30,7 @@ export function createKeyboardListener(document) {
   document.addEventListener("keyup", handleKeyup);
 
   function handleKeydown(event) {
-    const keyPressed = keys[event.key];
+    const keyPressed = keys[event.code];
 
     const command = {
       type: "move-player",
@@ -40,7 +42,7 @@ export function createKeyboardListener(document) {
   }
 
   function handleKeyup(event) {
-    const keyPressed = keys[event.key];
+    const keyPressed = keys[event.code];
 
     const command = {
       type: "move-player",

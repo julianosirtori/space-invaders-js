@@ -12,6 +12,7 @@ export function Game(ctx) {
   this.width = 1180;
   this.player = new Player(this);
   this.groupOfInvaders = new GroupOfInvaders(this);
+  this.groupOfInvaders.createdInvaders();
 
   this.render = () => {
     this.ctx.clearRect(0, 0, this.width, this.height);
@@ -20,6 +21,7 @@ export function Game(ctx) {
 
     this.player.render();
     this.groupOfInvaders.render();
+    checkCollision();
   };
 
   this.movePlayer = (command) => {
@@ -30,6 +32,9 @@ export function Game(ctx) {
         },
         left() {
           this.player.leftPressed = true;
+        },
+        space() {
+          this.player.shoot();
         },
       },
       pressUp: {
@@ -46,6 +51,26 @@ export function Game(ctx) {
     const moveFunction = acceptedMoves[typePress][keyPressed];
     if (moveFunction) {
       moveFunction.bind(this)();
+    }
+  };
+
+  const checkCollision = () => {
+    const invaders = this.groupOfInvaders.invaders;
+    for (let row = 0; row < invaders.length; row++) {
+      for (let col = 0; col < invaders[row].length; col++) {
+        const invader = invaders[row][col];
+        if (
+          this.player.projectileX > invader.x &&
+          this.player.projectileX < invader.x + 50 &&
+          this.player.projectileY > invader.y &&
+          this.player.projectileY < invader.y + 50 &&
+          invader.isAlive
+        ) {
+          this.player.score += 100;
+          invader.destroy();
+          this.player.hit();
+        }
+      }
     }
   };
 
@@ -82,7 +107,11 @@ function Player(game) {
   this.direction = 0; // 0 to left and 1 to right
   this.nextLine = false;
 
+  this.y = game.height - 60;
   this.x = game.width / 2;
+
+  this.projectileY = this.y;
+  this.projectileX = this.x;
 
   this.render = () => {
     const ctx = game.ctx;
@@ -98,7 +127,34 @@ function Player(game) {
     if (this.leftPressed) {
       playerToLeft();
     }
-    imageLoader.player(ctx, this.x - 30, game.height - 60);
+
+    if (this.projectileY <= 0) {
+      this.projectileY = this.y;
+      this.projectileX = this.x;
+    }
+
+    if (this.projectileY !== this.y) {
+      ctx.beginPath();
+      this.projectileY -= 10;
+      ctx.rect(this.projectileX, this.projectileY, 5, 5);
+      ctx.fillStyle = "white";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    imageLoader.player(ctx, this.x - 30, this.y);
+  };
+
+  this.shoot = () => {
+    if (this.projectileY === this.y) {
+      this.projectileY++;
+      this.projectileX = this.x;
+    }
+  };
+
+  this.hit = () => {
+    this.projectileY = this.y;
+    this.projectileX = this.x;
   };
 
   const playerToRight = () => {
@@ -120,33 +176,39 @@ function Player(game) {
 
 function GroupOfInvaders(game) {
   this.lines = 3;
-  this.columns = 14;
+  this.columns = 8;
   this.invaders = [];
   this.speed = 5;
   const invaderWidth = 60;
 
   const minWidth = 0;
-  ``;
+
   const maxWidth = game.width - this.columns * invaderWidth;
   this.x = 60;
   this.y = 150;
 
-  const createdInvaders = () => {
-    const typesPerLine = {
-      0: "yellow",
-      1: "green",
-      2: "red",
-    };
+  this.createdInvaders = () => {
     for (let line = 0; line < this.lines; line++) {
       this.invaders[line] = [];
-      const type = typesPerLine[line];
       for (let col = 0; col < this.columns; col++) {
         this.invaders[line][col] = new Invader(game);
-        this.invaders[line][col].render(
-          this.x + invaderWidth * col,
-          this.y + 50 * line,
-          type
-        );
+      }
+    }
+  };
+
+  const renderInvaders = () => {
+    const typesPerLine = {
+      0: "yellow",
+      1: "red",
+      2: "green",
+    };
+    for (let line = 0; line < this.lines; line++) {
+      const type = typesPerLine[line];
+      for (let col = 0; col < this.columns; col++) {
+        this.invaders[line][col].x = this.x + invaderWidth * col;
+        this.invaders[line][col].y = this.y + 50 * line;
+        this.invaders[line][col].type = type;
+        this.invaders[line][col].render();
       }
     }
   };
@@ -155,6 +217,7 @@ function GroupOfInvaders(game) {
     if (this.x >= maxWidth) {
       this.direction = 0;
       this.nextLine = true;
+      this.speed += 0.8;
       return;
     }
 
@@ -175,14 +238,18 @@ function GroupOfInvaders(game) {
   };
 
   this.render = () => {
-    createdInvaders();
     findDirections();
+    renderInvaders();
     moveGroup();
   };
 }
 
 function Invader(game) {
   this.width = 50;
+  this.x;
+  this.y;
+  this.type;
+  this.isAlive = true;
 
   const types = {
     red: imageLoader.invasorRed,
@@ -190,8 +257,15 @@ function Invader(game) {
     yellow: imageLoader.invasorYellow,
   };
 
-  this.render = (x, y, type) => {
-    types[type](game.ctx, x, y);
+  this.render = () => {
+    if (!this.isAlive) {
+      return;
+    }
+    types[this.type](game.ctx, this.x, this.y);
+  };
+
+  this.destroy = () => {
+    this.isAlive = false;
   };
 }
 
