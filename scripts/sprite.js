@@ -2,7 +2,7 @@ export const imageLoader = new ImageLoader();
 
 function ImageLoader() {
   this.image = new Image();
-  this.image.src = "../assets/sprite.png";
+  this.image.src = "assets/sprite.png";
 
   this.player = (ctx, x, y) => {
     drawSprite(ctx, 10, 10, 60, 30, x, y, 60, 30);
