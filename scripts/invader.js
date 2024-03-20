@@ -1,3 +1,5 @@
+import { VisualEffects } from "./audio.js";
+
 export function GroupOfInvaders(game) {
   this.lines = 2;
   this.columns = 8;
@@ -54,9 +56,11 @@ export function Invader(game) {
   this.y;
   this.type;
   this.isAlive = true;
+  this.visualEffects = new VisualEffects();
 
   this.destroy = () => {
     this.isAlive = false;
+    this.visualEffects.playExplosion();
   };
 }
 

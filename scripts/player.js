@@ -1,3 +1,5 @@
+import { VisualEffects } from "./audio.js";
+
 export function Player(game) {
   this.rightPressed = false;
   this.leftPressed = false;
@@ -5,6 +7,8 @@ export function Player(game) {
   this.direction = 0; // 0 to left and 1 to right
   this.nextLine = false;
   this.idDead = false;
+
+  this.visualEffects = new VisualEffects();
 
   this.y = game.height - 90;
   this.x = game.width / 2;
@@ -15,6 +19,7 @@ export function Player(game) {
 
   this.shoot = () => {
     if (!this.isShooting()) {
+      this.visualEffects.playLaseSound();
       this.projectileY += 41;
       this.projectileX = this.x + 34;
     }
@@ -23,6 +28,7 @@ export function Player(game) {
   this.hit = () => {
     this.projectileY = this.y;
     this.projectileX = this.x;
+    this.visualEffects.stopLaseSound();
   };
 
   this.playerToRight = () => {

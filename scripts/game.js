@@ -7,17 +7,19 @@ import {
   renderGameOverScreen,
   renderGameWin,
 } from "./render.js";
+import { Musics } from "./audio.js";
 
 const width = 1180;
 const height = 820;
 
 export function GameContext(ctx) {
+  const keyboardListener = createKeyboardListener();
   const globalState = {
     width: 1180,
     height: 820,
     screen: new InitialGame(),
+    audios: new Musics(),
   };
-  const keyboardListener = createKeyboardListener();
 
   this.start = () => {
     subscribeListenerKeyboard();
@@ -31,6 +33,8 @@ export function GameContext(ctx) {
 
   const nextState = () => {
     globalState.screen = globalState.screen.next();
+    globalState.audios.stopAllMusics();
+    globalState.screen.startMusic();
     subscribeListenerKeyboard();
   };
 
@@ -46,6 +50,10 @@ export function GameContext(ctx) {
 
     this.next = function () {
       return new Game();
+    };
+
+    this.startMusic = () => {
+      globalState.audios.playOpening();
     };
 
     this.handleCommand = (command) => {
@@ -77,6 +85,10 @@ export function GameContext(ctx) {
 
     this.next = function () {
       return this.nextState;
+    };
+
+    this.startMusic = () => {
+      globalState.audios.playGameTheme();
     };
 
     this.player = new Player(this);
@@ -155,6 +167,10 @@ export function GameContext(ctx) {
       return new Game();
     };
 
+    this.startMusic = () => {
+      globalState.audios.playGameOver();
+    };
+
     this.handleCommand = (command) => {
       const acceptedMoves = {
         pressDown: {
@@ -180,8 +196,13 @@ export function GameContext(ctx) {
     this.name = "GAME_WIN";
     this.width = width;
     this.height = height;
+
     this.next = function () {
       return new Game();
+    };
+
+    this.startMusic = () => {
+      globalState.audios.playVictory();
     };
 
     this.handleCommand = (command) => {
