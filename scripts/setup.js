@@ -1,6 +1,5 @@
+import { GameContext } from "./game.js";
 import { loadAllFonts } from "./fonts.js";
-import { Game } from "./game.js";
-import { createKeyboardListener } from "./keyboard-listener.js";
 
 async function main() {
   await loadAllFonts();
@@ -10,16 +9,8 @@ async function main() {
 
   const ctx = canvas.getContext("2d");
 
-  const game = new Game(ctx);
-
-  const keyboardListener = createKeyboardListener(document);
-  keyboardListener.subscribe(game.movePlayer);
-
-  function render() {
-    game.render();
-    window.requestAnimationFrame(render);
-  }
-  render();
+  const gameContext = new GameContext(ctx);
+  gameContext.start();
 }
 main();
 

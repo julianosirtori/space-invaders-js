@@ -2,22 +2,30 @@ export const imageLoader = new ImageLoader();
 
 function ImageLoader() {
   this.image = new Image();
-  this.image.src = "assets/sprite.png";
+  this.image.src = "assets/sprites.png";
 
   this.player = (ctx, x, y) => {
-    drawSprite(ctx, 10, 10, 60, 30, x, y, 60, 30);
+    drawSprite(ctx, 154, 148, 136, 90, x, y, 136, 90);
   };
 
-  this.invasorRed = (ctx, x, y) => {
-    drawSprite(ctx, 90, 10, 40, 32, x, y, 40, 32);
+  this.invasorPink = (ctx, x, y) => {
+    drawSprite(ctx, 362, 10, 80, 104, x, y, 80, 104);
   };
 
-  this.invasorGreen = (ctx, x, y) => {
-    drawSprite(ctx, 10, 60, 40, 32, x, y, 40, 32);
+  this.invasorLemon = (ctx, x, y) => {
+    drawSprite(ctx, 362, 134, 80, 102, x, y, 80, 102);
   };
 
-  this.invasorYellow = (ctx, x, y) => {
-    drawSprite(ctx, 150, 10, 40, 32, x, y, 40, 32);
+  this.spaceKey = (ctx, x, y) => {
+    drawSprite(ctx, 10, 10, 188, 118, x, y, 188, 118);
+  };
+
+  this.leftKey = (ctx, x, y) => {
+    drawSprite(ctx, 220, 10, 124, 118, x, y, 124, 118);
+  };
+
+  this.rightKey = (ctx, x, y) => {
+    drawSprite(ctx, 10, 148, 124, 118, x, y, 124, 118);
   };
 
   return this;

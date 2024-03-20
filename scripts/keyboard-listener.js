@@ -4,10 +4,11 @@ const keys = {
   KeyD: "right",
   ArrowRight: "right",
   Space: "space",
+  KeyF: "start",
 };
 
 // observer pattern
-export function createKeyboardListener(document) {
+export function createKeyboardListener() {
   const state = {
     observers: [],
   };
@@ -16,7 +17,7 @@ export function createKeyboardListener(document) {
     state.observers.push(observerFunction);
   }
 
-  function unsubscribeAll(observerFunction) {
+  function unsubscribeAll() {
     state.observers = [];
   }
 
