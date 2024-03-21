@@ -28,6 +28,14 @@ function ImageLoader() {
     drawSprite(ctx, 10, 148, 124, 118, x, y, 124, 118);
   };
 
+  this.projectilePlayer = (ctx, x, y) => {
+    drawSprite(ctx, 515, 164, 23, 48, x, y, 23, 48);
+  };
+
+  this.projectileInvader = (ctx, x, y) => {
+    drawSprite(ctx, 510, 44, 31, 40, x, y, 31, 40);
+  };
+
   return this;
 }
 

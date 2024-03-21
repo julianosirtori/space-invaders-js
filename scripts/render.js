@@ -79,9 +79,8 @@ export async function renderGameScreen(ctx, game) {
   renderScore(ctx, game);
   game.checkCollision();
   renderPlayer(ctx, game);
-  game.groupOfInvaders.findDirection();
   renderGroupOfInvaders(ctx, game);
-  game.groupOfInvaders.moveGroup();
+  game.groupOfInvaders.checkCollision();
 }
 
 function renderScore(ctx, game) {
@@ -101,22 +100,33 @@ function renderPlayer(ctx, game) {
     game.player.playerToLeft();
   }
 
-  if (game.player.projectileY <= 0) {
-    game.player.resetProjectile();
-  }
-
-  if (game.player.isShooting()) {
-    game.player.projectileY -= 15;
-    ctx.rect(game.player.projectileX, game.player.projectileY, 5, 10);
-    ctx.fillStyle = "white";
-    ctx.fill();
-    ctx.closePath();
-  }
+  renderProjectilePlayer(ctx, game);
 
   imageLoader.player(ctx, game.player.x - 30, game.player.y);
 }
 
+function renderProjectilePlayer(ctx, game) {
+  if (!game.player.projectile) {
+    return;
+  }
+
+  if (game.player.projectile.y <= 0) {
+    game.player.resetProjectile();
+  }
+
+  if (game.player.isShooting()) {
+    game.player.projectile.y -= 15;
+    imageLoader.projectilePlayer(
+      ctx,
+      game.player.projectile.x,
+      game.player.projectile.y
+    );
+  }
+}
+
 function renderGroupOfInvaders(ctx, game) {
+  game.groupOfInvaders.findDirection();
+
   const groupOfInvaders = game.groupOfInvaders;
   const typesPerLine = {
     0: "pink",
@@ -130,9 +140,14 @@ function renderGroupOfInvaders(ctx, game) {
       groupOfInvaders.invaders[line][col].y = groupOfInvaders.y + 70 * line;
       groupOfInvaders.invaders[line][col].type = type;
 
-      renderGroupInvaders(ctx, groupOfInvaders.invaders[line][col]);
+      renderInvader(ctx, groupOfInvaders.invaders[line][col]);
     }
   }
+
+  game.groupOfInvaders.moveGroup();
+  game.groupOfInvaders.prepareToShoot();
+
+  renderInvaderProjectiles(ctx, game);
 }
 
 const types = {
@@ -140,10 +155,23 @@ const types = {
   lemon: imageLoader.invasorLemon,
 };
 
-function renderGroupInvaders(ctx, invader) {
+function renderInvader(ctx, invader) {
   if (!invader.isAlive) {
     return;
   }
+
   types[invader.type](ctx, invader.x, invader.y);
+}
+
+function renderInvaderProjectiles(ctx, game) {
+  for (
+    let index = 0;
+    index < game.groupOfInvaders.projectiles.length;
+    index++
+  ) {
+    const projectile = game.groupOfInvaders.projectiles[index];
+    projectile.y += 7;
+    imageLoader.projectileInvader(ctx, projectile.x, projectile.y);
+  }
 }
 

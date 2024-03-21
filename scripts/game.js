@@ -96,10 +96,10 @@ export function GameContext(ctx) {
     this.groupOfInvaders.createdInvaders();
 
     this.render = () => {
-      renderGameScreen(ctx, this);
       if (this.player.isDead) {
         nextState();
       }
+      renderGameScreen(ctx, this);
     };
 
     this.handleCommand = (command) => {
@@ -137,16 +137,17 @@ export function GameContext(ctx) {
       for (let row = 0; row < invaders.length; row++) {
         for (let col = 0; col < invaders[row].length; col++) {
           const invader = invaders[row][col];
+
           if (
-            this.player.projectileX > invader.x &&
-            this.player.projectileX < invader.x + 50 &&
-            this.player.projectileY > invader.y &&
-            this.player.projectileY < invader.y + 50 &&
+            this.player.projectile?.x > invader.x &&
+            this.player.projectile?.x < invader.x + invader.width &&
+            this.player.projectile?.y > invader.y &&
+            this.player.projectile?.y < invader.y + invader.width &&
             invader.isAlive
           ) {
             this.player.score += 100;
             invader.destroy();
-            this.player.hit();
+            this.player.resetProjectile();
 
             if (this.player.score === 1600) {
               this.nextState = new GameWin();
