@@ -11,15 +11,18 @@ import { Musics } from "./audio.js";
 
 const width = 1180;
 const height = 820;
+export const globalState = {
+  width: 1180,
+  height: 820,
+  screen: undefined,
+  audios: new Musics(),
+  score: 0,
+  bestScore: 0,
+};
 
 export function GameContext(ctx) {
   const keyboardListener = createKeyboardListener();
-  const globalState = {
-    width: 1180,
-    height: 820,
-    screen: new InitialGame(),
-    audios: new Musics(),
-  };
+  globalState.screen = new InitialGame();
 
   this.start = () => {
     subscribeListenerKeyboard();
@@ -82,6 +85,7 @@ export function GameContext(ctx) {
     this.width = width;
     this.height = height;
     this.nextState = new GameOver();
+    globalState.score = 0;
 
     this.next = function () {
       return this.nextState;
@@ -145,11 +149,13 @@ export function GameContext(ctx) {
             this.player.projectile?.y < invader.y + invader.width &&
             invader.isAlive
           ) {
-            this.player.score += 100;
+            globalState.score += 100;
             invader.destroy();
             this.player.resetProjectile();
-
-            if (this.player.score === 1600) {
+            if (globalState.bestScore <= globalState.score) {
+              globalState.bestScore = globalState.score;
+            }
+            if (globalState.score === 1600) {
               this.nextState = new GameWin();
               nextState();
             }

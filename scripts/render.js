@@ -1,4 +1,5 @@
 import { imageLoader } from "./sprite.js";
+import { globalState } from "./game.js";
 
 export async function renderInitialGameScreen(ctx, game) {
   ctx.clearRect(0, 0, game.width, game.height);
@@ -44,7 +45,11 @@ export async function renderGameOverScreen(ctx, game) {
   ctx.fillStyle = "#ADFF00";
   ctx.shadowColor = "#ADFF00";
   ctx.font = "24px Press_start_2p";
-  ctx.fillText(`SCORE: 0 BEST: 0`, game.width / 2 - 180, 360);
+  ctx.fillText(
+    `SCORE: ${globalState.score} BEST: ${globalState.bestScore}`,
+    game.width / 2 - 180,
+    360
+  );
   ctx.font = "20px Press_start_2p";
   ctx.fillStyle = "#C0C0C0";
   ctx.shadowColor = "#C0C0C0";
@@ -88,7 +93,7 @@ function renderScore(ctx, game) {
   ctx.fillStyle = "#C0C0C0";
   ctx.font = " 20px Press_start_2p";
   ctx.fillText("SCORE:", game.width / 2 - 100, 70);
-  ctx.fillText(game.player.score, game.width / 2 + 20, 70);
+  ctx.fillText(globalState.score, game.width / 2 + 20, 70);
   ctx.closePath();
 }
 
