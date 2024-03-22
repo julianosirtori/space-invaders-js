@@ -9,23 +9,24 @@ export async function renderInitialGameScreen(ctx, game) {
   ctx.font = "48px Press_start_2p";
   ctx.fillStyle = "#FF517B";
   ctx.shadowColor = "#FF517B";
+  ctx.textAlign = "center";
   ctx.shadowBlur = 10;
-  ctx.fillText("SPACE", game.width / 2 - 100, 300);
+  ctx.fillText("SPACE", game.width / 2, 300);
   ctx.fillStyle = "#ADFF00";
   ctx.shadowColor = "#ADFF00";
-  ctx.fillText("INVADERS", game.width / 2 - 170, 360);
+  ctx.fillText("INVADERS", game.width / 2, 360);
   ctx.font = "20px Press_start_2p";
   ctx.fillStyle = "#C0C0C0";
   ctx.shadowColor = "#C0C0C0";
-  ctx.fillText("PRESS 'F' TO START THE GAME", game.width / 2 - 250, 500);
+  ctx.fillText("PRESS 'F' TO START THE GAME", game.width / 2, 500);
   ctx.shadowBlur = 0;
 
   ctx.font = "12px Press_start_2p";
   ctx.globalAlpha = 0.5;
-  imageLoader.leftKey(ctx, 400, game.height - 150);
-  imageLoader.rightKey(ctx, 450, game.height - 150);
+  imageLoader.leftKey(ctx, 350, game.height - 150);
+  imageLoader.rightKey(ctx, 400, game.height - 150);
   ctx.fillText("to move, ", 550, game.height - 85);
-  imageLoader.spaceKey(ctx, 620, game.height - 150);
+  imageLoader.spaceKey(ctx, 575, game.height - 150);
   ctx.fillText("to shoot ", 780, game.height - 85);
   ctx.globalAlpha = 1;
 
@@ -41,19 +42,20 @@ export async function renderGameOverScreen(ctx, game) {
   ctx.fillStyle = "#FF517B";
   ctx.shadowColor = "#FF517B";
   ctx.shadowBlur = 10;
-  ctx.fillText("YOU LOSE !", game.width / 2 - 220, 300);
+  ctx.fillText("YOU LOSE !", game.width / 2, 300);
   ctx.fillStyle = "#ADFF00";
   ctx.shadowColor = "#ADFF00";
   ctx.font = "24px Press_start_2p";
+  ctx.textAlign = "center";
   ctx.fillText(
     `SCORE: ${globalState.score} BEST: ${globalState.bestScore}`,
-    game.width / 2 - 180,
+    game.width / 2,
     360
   );
   ctx.font = "20px Press_start_2p";
   ctx.fillStyle = "#C0C0C0";
   ctx.shadowColor = "#C0C0C0";
-  ctx.fillText("PRESS 'F' TO RESTART", game.width / 2 - 180, 500);
+  ctx.fillText("PRESS 'F' TO RESTART", game.width / 2, 500);
   ctx.shadowBlur = 0;
 
   ctx.closePath();
@@ -64,15 +66,21 @@ export async function renderGameWin(ctx, game) {
 
   ctx.beginPath();
 
+  ctx.textAlign = "center";
   ctx.font = "48px Press_start_2p";
   ctx.fillStyle = "#ADFF00";
   ctx.shadowColor = "#ADFF00";
   ctx.shadowBlur = 10;
-  ctx.fillText("Victory!", game.width / 2 - 180, 300);
+  ctx.fillText("Victory!", game.width / 2, 300);
   ctx.font = "20px Press_start_2p";
   ctx.fillStyle = "#C0C0C0";
   ctx.shadowColor = "#C0C0C0";
-  ctx.fillText("PRESS 'F' TO RESTART", game.width / 2 - 200, 500);
+  ctx.fillText(
+    `SCORE: ${globalState.score} BEST: ${globalState.bestScore}`,
+    game.width / 2,
+    360
+  );
+  ctx.fillText("PRESS 'F' TO RESTART", game.width / 2, 500);
   ctx.shadowBlur = 0;
 
   ctx.closePath();
@@ -91,9 +99,9 @@ export async function renderGameScreen(ctx, game) {
 function renderScore(ctx, game) {
   ctx.beginPath();
   ctx.fillStyle = "#C0C0C0";
+  ctx.textAlign = "center";
   ctx.font = " 20px Press_start_2p";
-  ctx.fillText("SCORE:", game.width / 2 - 100, 70);
-  ctx.fillText(globalState.score, game.width / 2 + 20, 70);
+  ctx.fillText(`SCORE: ${globalState.score}`, game.width / 2, 70);
   ctx.closePath();
 }
 
