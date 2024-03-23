@@ -47,11 +47,7 @@ export async function renderGameOverScreen(ctx, game) {
   ctx.shadowColor = "#ADFF00";
   ctx.font = "24px Press_start_2p";
   ctx.textAlign = "center";
-  ctx.fillText(
-    `SCORE: ${globalState.score} BEST: ${globalState.bestScore}`,
-    game.width / 2,
-    360
-  );
+  ctx.fillText(`BEST SCORE: ${globalState.bestScore}`, game.width / 2, 360);
   ctx.font = "20px Press_start_2p";
   ctx.fillStyle = "#C0C0C0";
   ctx.shadowColor = "#C0C0C0";
@@ -73,13 +69,13 @@ export async function renderGameWin(ctx, game) {
   ctx.shadowBlur = 10;
   ctx.fillText("Victory!", game.width / 2, 300);
   ctx.font = "20px Press_start_2p";
-  ctx.fillStyle = "#C0C0C0";
-  ctx.shadowColor = "#C0C0C0";
   ctx.fillText(
     `SCORE: ${globalState.score} BEST: ${globalState.bestScore}`,
     game.width / 2,
     360
   );
+  ctx.fillStyle = "#C0C0C0";
+  ctx.shadowColor = "#C0C0C0";
   ctx.fillText("PRESS 'F' TO RESTART", game.width / 2, 500);
   ctx.shadowBlur = 0;
 

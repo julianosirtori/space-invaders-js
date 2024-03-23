@@ -8,6 +8,8 @@ export function GroupOfInvaders(game) {
   this.speed = 1;
   this.invaderWidth = 80;
 
+  this.scoreMultiplier = 200;
+
   this.projectiles = [];
   this.delayToShoot = 40;
   this.frame = 0;
@@ -31,6 +33,8 @@ export function GroupOfInvaders(game) {
     if (this.x >= maxWidth) {
       this.direction = 0;
       this.nextLine = true;
+      this.scoreMultiplier -= 10;
+
       this.speed += 1.2;
       return;
     }

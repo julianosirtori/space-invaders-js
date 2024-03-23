@@ -22,7 +22,7 @@ export const globalState = {
 
 export function GameContext(ctx) {
   const keyboardListener = createKeyboardListener();
-  globalState.screen = new InitialGame();
+  globalState.screen = new GameWin();
 
   this.start = () => {
     subscribeListenerKeyboard();
@@ -138,9 +138,14 @@ export function GameContext(ctx) {
 
     this.checkCollision = () => {
       const invaders = this.groupOfInvaders.invaders;
+      const deadInvaders = [];
       for (let row = 0; row < invaders.length; row++) {
         for (let col = 0; col < invaders[row].length; col++) {
           const invader = invaders[row][col];
+
+          if (!invader.isAlive) {
+            deadInvaders.push(invader);
+          }
 
           if (
             this.player.projectile?.x > invader.x &&
@@ -149,18 +154,22 @@ export function GameContext(ctx) {
             this.player.projectile?.y < invader.y + invader.width &&
             invader.isAlive
           ) {
-            globalState.score += 100;
+            globalState.score += 1 * this.groupOfInvaders.scoreMultiplier;
             invader.destroy();
             this.player.resetProjectile();
-            if (globalState.bestScore <= globalState.score) {
-              globalState.bestScore = globalState.score;
-            }
-            if (globalState.score === 1600) {
-              this.nextState = new GameWin();
-              nextState();
-            }
           }
         }
+      }
+
+      if (
+        deadInvaders.length ===
+        this.groupOfInvaders.lines * this.groupOfInvaders.columns
+      ) {
+        if (globalState.bestScore <= globalState.score) {
+          globalState.bestScore = globalState.score;
+        }
+        this.nextState = new GameWin();
+        nextState();
       }
     };
   }
