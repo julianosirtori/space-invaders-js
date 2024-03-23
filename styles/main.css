@@ -14,3 +14,12 @@
   background-image: url("../assets/noise.gif");
   opacity: 0.04;
 }
+
+.github-link{
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
