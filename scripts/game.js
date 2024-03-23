@@ -22,7 +22,7 @@ export const globalState = {
 
 export function GameContext(ctx) {
   const keyboardListener = createKeyboardListener();
-  globalState.screen = new GameWin();
+  globalState.screen = new InitialGame();
 
   this.start = () => {
     subscribeListenerKeyboard();
