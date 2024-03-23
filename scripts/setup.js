@@ -9,8 +9,14 @@ async function main() {
 
   const ctx = canvas.getContext("2d");
 
-  const gameContext = new GameContext(ctx);
+  const gameContext = new GameContext();
   gameContext.start();
+
+  function render() {
+    gameContext.render(ctx);
+    window.requestAnimationFrame(render);
+  }
+  render();
 }
 main();
 

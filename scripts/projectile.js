@@ -1,8 +1,8 @@
 export const INVASOR = 1;
 export const STARSHIP = 2;
 
-export function ProjectileFactory() {
-  this.makeProjectile = (type, x, y) => {
+export class ProjectileFactory {
+  makeProjectile(type, x, y) {
     switch (type) {
       case INVASOR:
         return new InvasorProjectile(type, x, y);
@@ -11,16 +11,20 @@ export function ProjectileFactory() {
       default:
         return;
     }
-  };
+  }
 }
 
-function InvasorProjectile(type, x, y) {
-  this.x = x;
-  this.y = y;
+class InvasorProjectile {
+  constructor(type, x, y) {
+    this.x = x;
+    this.y = y;
+  }
 }
 
-function StarshipProjectile(type, x, y) {
-  this.x = x;
-  this.y = y;
+class StarshipProjectile {
+  constructor(type, x, y) {
+    this.x = x;
+    this.y = y;
+  }
 }
 

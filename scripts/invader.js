@@ -1,36 +1,41 @@
 import { VisualEffects } from "./audio.js";
 import { ProjectileFactory, INVASOR } from "./projectile.js";
 
-export function GroupOfInvaders(game) {
-  this.lines = 2;
-  this.columns = 8;
-  this.invaders = [];
-  this.speed = 1;
-  this.invaderWidth = 80;
+export class GroupOfInvaders {
+  constructor(game) {
+    this.game = game;
 
-  this.scoreMultiplier = 200;
+    this.lines = 2;
+    this.columns = 8;
+    this.invaders = [];
+    this.speed = 1;
+    this.invaderWidth = 80;
 
-  this.projectiles = [];
-  this.delayToShoot = 40;
-  this.frame = 0;
+    this.scoreMultiplier = 200;
 
-  const minWidth = 0;
+    this.projectiles = [];
+    this.delayToShoot = 40;
+    this.frame = 0;
 
-  const maxWidth = game.width - this.columns * this.invaderWidth;
-  this.x = 60;
-  this.y = 100;
+    this.width = game.width;
+    this.maxWidth = this.width - this.columns * this.invaderWidth;
+    this.minWidth = 0;
 
-  this.createdInvaders = () => {
+    this.x = 60;
+    this.y = 100;
+  }
+
+  createdInvaders() {
     for (let line = 0; line < this.lines; line++) {
       this.invaders[line] = [];
       for (let col = 0; col < this.columns; col++) {
-        this.invaders[line][col] = new Invader(game);
+        this.invaders[line][col] = new Invader(this.game);
       }
     }
-  };
+  }
 
-  this.findDirection = () => {
-    if (this.x >= maxWidth) {
+  findDirection() {
+    if (this.x >= this.maxWidth) {
       this.direction = 0;
       this.nextLine = true;
       this.scoreMultiplier -= 10;
@@ -39,48 +44,48 @@ export function GroupOfInvaders(game) {
       return;
     }
 
-    if (this.x <= minWidth) {
+    if (this.x <= this.minWidth) {
       this.direction = 1;
       this.nextLine = true;
       return;
     }
 
     this.nextLine = false;
-  };
+  }
 
-  this.moveGroup = () => {
+  moveGroup() {
     this.x = this.direction ? this.x + this.speed : this.x - this.speed;
     if (this.nextLine) {
       this.y += 15;
-      if (this.y >= game.height - 200) {
-        game.player.isDead = true;
+      if (this.y >= this.game.height - 200) {
+        this.game.player.isDead = true;
       }
     }
-  };
+  }
 
-  this.prepareToShoot = () => {
+  prepareToShoot() {
     this.frame++;
     if (this.frame >= this.delayToShoot) {
       this.frame = 0;
-      shoot();
+      this.shoot();
     }
-  };
+  }
 
-  this.checkCollision = () => {
+  checkCollision() {
     for (let index = 0; index < this.projectiles.length; index++) {
       const projectile = this.projectiles[index];
       if (
-        projectile.x > game.player.x - 20 &&
-        projectile.x < game.player.x + 80 &&
-        projectile.y > game.player.y - 20 &&
-        projectile.y < game.player.y + 20
+        projectile.x > this.game.player.x - 20 &&
+        projectile.x < this.game.player.x + 80 &&
+        projectile.y > this.game.player.y - 20 &&
+        projectile.y < this.game.player.y + 20
       ) {
-        game.player.isDead = true;
+        this.game.player.isDead = true;
       }
     }
-  };
+  }
 
-  const shoot = () => {
+  shoot() {
     // find valid alive invaders
     const validInvadersIndexes = [];
     for (let line = 0; line < this.lines; line++) {
@@ -101,32 +106,35 @@ export function GroupOfInvaders(game) {
     this.projectiles.push(
       this.invaders[matrixIndex[0]][matrixIndex[1]].shoot()
     );
-  };
+  }
 }
 
-export function Invader(game) {
-  this.screenHeight = game.height;
+export class Invader {
+  constructor(game) {
+    this.game = game;
+    this.screenHeight = game.height;
 
-  this.width = 50;
-  this.x;
-  this.y;
-  this.type;
-  this.isAlive = true;
+    this.width = 50;
+    this.x;
+    this.y;
+    this.type;
+    this.isAlive = true;
 
-  this.visualEffects = new VisualEffects();
+    this.visualEffects = new VisualEffects();
+  }
 
-  this.shoot = () => {
+  shoot() {
     const projectileFactory = new ProjectileFactory();
     return projectileFactory.makeProjectile(
       INVASOR,
       this.x + this.width / 1.5,
       this.y + 25
     );
-  };
+  }
 
-  this.destroy = () => {
+  destroy() {
     this.isAlive = false;
     this.visualEffects.playExplosion();
-  };
+  }
 }
 

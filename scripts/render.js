@@ -2,6 +2,9 @@ import { imageLoader } from "./sprite.js";
 import { globalState } from "./game.js";
 
 export async function renderInitialGameScreen(ctx, game) {
+  if (!ctx) {
+    return;
+  }
   ctx.clearRect(0, 0, game.width, game.height);
 
   ctx.beginPath();
@@ -34,6 +37,9 @@ export async function renderInitialGameScreen(ctx, game) {
 }
 
 export async function renderGameOverScreen(ctx, game) {
+  if (!ctx) {
+    return;
+  }
   ctx.clearRect(0, 0, game.width, game.height);
 
   ctx.beginPath();
@@ -58,6 +64,9 @@ export async function renderGameOverScreen(ctx, game) {
 }
 
 export async function renderGameWin(ctx, game) {
+  if (!ctx) {
+    return;
+  }
   ctx.clearRect(0, 0, game.width, game.height);
 
   ctx.beginPath();
@@ -83,6 +92,9 @@ export async function renderGameWin(ctx, game) {
 }
 
 export async function renderGameScreen(ctx, game) {
+  if (!ctx) {
+    return;
+  }
   ctx.clearRect(0, 0, game.width, game.height);
 
   renderScore(ctx, game);
