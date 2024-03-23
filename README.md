@@ -8,6 +8,8 @@ This project served as a means for me to study design patterns. Within it, I app
 * Observer
 * Factory
 
+[Figma Link](https://www.figma.com/community/file/1256188178472800433)
+
 ![screenshoot](./print.png)
 
 ## Getting Started
