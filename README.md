@@ -2,7 +2,7 @@
 
 "Space Invaders" is an iconic arcade game where players defend Earth by shooting descending waves of alien invaders while avoiding their projectiles.
 
-This project served as a means for me to study design patterns. Within it, I applied the following design patterns:
+The goal of this project is to learn design patterns. In it, I applied these design patterns:
 
 * State
 * Observer
